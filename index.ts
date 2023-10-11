@@ -1,1 +1,4 @@
-console.log("Hello via Bun!");
+import "./src/style.scss";
+import main from "./src/main";
+
+main();
