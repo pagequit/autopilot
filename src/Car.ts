@@ -20,12 +20,16 @@ export default class Car {
     this.controls = new Controls();
     this.speed = 0;
     this.maxSpeed = 4;
-    this.acceleration = 1;
+    this.acceleration = 0.4;
     this.friction = 0.2;
     this.angle = 0;
   }
 
   update() {
+    this.move();
+  }
+
+  move() {
     if (this.controls.u) {
       this.speed += this.acceleration;
     }
@@ -50,15 +54,18 @@ export default class Car {
       this.speed = 0;
     }
 
-    if (this.controls.l) {
-      this.angle += 0.02;
-    }
-    if (this.controls.r) {
-      this.angle -= 0.02;
+    if (this.speed !== 0) {
+      const flip = this.speed > 0 ? 1 : -1;
+      if (this.controls.l) {
+        this.angle += 0.02 * flip;
+      }
+      if (this.controls.r) {
+        this.angle -= 0.02 * flip;
+      }
     }
 
-    this.x += Math.sin(-this.angle) * this.speed;
-    this.y -= Math.cos(-this.angle) * this.speed;
+    this.x -= Math.sin(this.angle) * this.speed;
+    this.y -= Math.cos(this.angle) * this.speed;
   }
 
   draw(ctx: CanvasRenderingContext2D) {
