@@ -10,6 +10,7 @@ export default class Car {
   maxSpeed: number;
   acceleration: number;
   friction: number;
+  angle: number;
 
   constructor(x: number, y: number, w: number, h: number) {
     this.x = x;
@@ -21,20 +22,15 @@ export default class Car {
     this.maxSpeed = 4;
     this.acceleration = 1;
     this.friction = 0.2;
+    this.angle = 0;
   }
 
   update() {
     if (this.controls.u) {
-      this.speed -= this.acceleration;
-    }
-    if (this.controls.d) {
       this.speed += this.acceleration;
     }
-    if (this.controls.l) {
-      this.x -= 2;
-    }
-    if (this.controls.r) {
-      this.x += 2;
+    if (this.controls.d) {
+      this.speed -= this.acceleration;
     }
 
     if (this.speed > this.maxSpeed) {
@@ -54,10 +50,22 @@ export default class Car {
       this.speed = 0;
     }
 
-    this.y += this.speed;
+    if (this.controls.l) {
+      this.angle += 0.02;
+    }
+    if (this.controls.r) {
+      this.angle -= 0.02;
+    }
+
+    this.x += Math.sin(-this.angle) * this.speed;
+    this.y -= Math.cos(-this.angle) * this.speed;
   }
 
   draw(ctx: CanvasRenderingContext2D) {
-    ctx.fillRect(this.x - this.w / 2, this.y - this.h / 2, this.w, this.h);
+    ctx.save();
+    ctx.translate(this.x, this.y);
+    ctx.rotate(-this.angle);
+    ctx.fillRect(-this.w / 2, -this.h / 2, this.w, this.h);
+    ctx.restore();
   }
 }
