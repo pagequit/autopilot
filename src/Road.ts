@@ -3,7 +3,7 @@ import Vector2 from "./lib/Vector2";
 import lerp from "./lib/lerp";
 
 export default class Road {
-  x: number;
+  center: number;
   width: number;
   laneCount: number;
   top: number;
@@ -12,13 +12,13 @@ export default class Road {
   right: number;
   borders: Array<Line2D>;
 
-  constructor(x: number, width: number, laneCount: number) {
-    this.x = x;
+  constructor(center: number, width: number, laneCount: number) {
+    this.center = center;
     this.width = width;
     this.laneCount = laneCount;
 
-    this.left = x - width / 2;
-    this.right = x + width / 2;
+    this.left = center - width / 2;
+    this.right = center + width / 2;
 
     const pseudoInifity = 1000000;
     this.top = -pseudoInifity;
@@ -44,6 +44,7 @@ export default class Road {
     ctx.lineWidth = 4;
     ctx.strokeStyle = "white";
 
+    ctx.setLineDash([20, 20]);
     for (let i = 1; i < this.laneCount; i++) {
       const x = lerp(
         this.left,
@@ -51,13 +52,11 @@ export default class Road {
         i / this.laneCount,
       );
 
-      ctx.setLineDash([20, 20]);
       ctx.beginPath();
       ctx.moveTo(x, this.top);
       ctx.lineTo(x, this.bottom);
       ctx.stroke();
     }
-    // reset line dash
     ctx.setLineDash([]);
 
     for (const border of this.borders) {

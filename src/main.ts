@@ -3,6 +3,7 @@
 
 import Car from "./Car";
 import Road from "./Road";
+import Sensor from "./Sensor";
 import Vector2 from "./lib/Vector2";
 
 export default function main() {
@@ -22,6 +23,7 @@ export default function main() {
     30,
     50,
   );
+  const sensor = new Sensor(car.position);
 
   (function animate() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -29,7 +31,7 @@ export default function main() {
     car.update();
 
     ctx.save();
-    ctx.translate(0, -car.position.y + canvas.height / 3 * 2);
+    ctx.translate(0, -car.position.y + canvas.height * 0.667);
 
     road.draw(ctx);
     car.draw(ctx);
