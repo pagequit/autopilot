@@ -3,6 +3,7 @@
 
 import Car from "./Car";
 import Road from "./Road";
+import Vector2 from "./lib/Vector2";
 
 export default function main() {
   const canvas = document.createElement("canvas");
@@ -13,15 +14,27 @@ export default function main() {
 
   const ctx = canvas.getContext("2d") as CanvasRenderingContext2D;
   const road = new Road(canvas.width / 2, canvas.width, 3);
-  const car = new Car(100, 100, 30, 50);
+  const car = new Car(
+    new Vector2(
+      road.getLaneCenter(Math.floor(road.laneCount / 2)),
+      canvas.height / 2,
+    ),
+    30,
+    50,
+  );
 
   (function animate() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    road.draw(ctx);
-
     car.update();
+
+    ctx.save();
+    ctx.translate(0, -car.position.y + canvas.height / 3 * 2);
+
+    road.draw(ctx);
     car.draw(ctx);
+
+    ctx.restore();
 
     requestAnimationFrame(animate);
   })();

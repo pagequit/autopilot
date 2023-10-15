@@ -1,10 +1,10 @@
 import Controls from "./Controls";
+import Vector2 from "./lib/Vector2";
 
 export default class Car {
-  x: number;
-  y: number;
-  w: number;
-  h: number;
+  position: Vector2;
+  width: number;
+  height: number;
   controls: Controls;
   speed: number;
   maxSpeed: number;
@@ -12,16 +12,15 @@ export default class Car {
   friction: number;
   angle: number;
 
-  constructor(x: number, y: number, w: number, h: number) {
-    this.x = x;
-    this.y = y;
-    this.w = w;
-    this.h = h;
+  constructor(positinon: Vector2, width: number, height: number) {
+    this.position = positinon;
+    this.width = width;
+    this.height = height;
     this.controls = new Controls();
     this.speed = 0;
-    this.maxSpeed = 4;
-    this.acceleration = 0.4;
-    this.friction = 0.2;
+    this.maxSpeed = 3;
+    this.acceleration = 0.2;
+    this.friction = 0.1;
     this.angle = 0;
   }
 
@@ -64,15 +63,15 @@ export default class Car {
       }
     }
 
-    this.x -= Math.sin(this.angle) * this.speed;
-    this.y -= Math.cos(this.angle) * this.speed;
+    this.position.x -= Math.sin(this.angle) * this.speed;
+    this.position.y -= Math.cos(this.angle) * this.speed;
   }
 
   draw(ctx: CanvasRenderingContext2D) {
     ctx.save();
-    ctx.translate(this.x, this.y);
+    ctx.translate(this.position.x, this.position.y);
     ctx.rotate(-this.angle);
-    ctx.fillRect(-this.w / 2, -this.h / 2, this.w, this.h);
+    ctx.fillRect(-this.width / 2, -this.height / 2, this.width, this.height);
     ctx.restore();
   }
 }
