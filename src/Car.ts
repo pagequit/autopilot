@@ -1,5 +1,6 @@
 import Controls from "./Controls";
 import Vector2 from "./lib/Vector2";
+import Angle from "./lib/Angle";
 
 export default class Car {
   position: Vector2;
@@ -10,7 +11,7 @@ export default class Car {
   maxSpeed: number;
   acceleration: number;
   friction: number;
-  angle: number;
+  angle: Angle;
 
   constructor(positinon: Vector2, width: number, height: number) {
     this.position = positinon;
@@ -21,7 +22,7 @@ export default class Car {
     this.maxSpeed = 3;
     this.acceleration = 0.2;
     this.friction = 0.1;
-    this.angle = 0;
+    this.angle = new Angle(0);
   }
 
   update() {
@@ -56,21 +57,21 @@ export default class Car {
     if (this.speed !== 0) {
       const flip = this.speed > 0 ? 1 : -1;
       if (this.controls.l) {
-        this.angle += 0.02 * flip;
+        this.angle.degrees += 0.02 * flip;
       }
       if (this.controls.r) {
-        this.angle -= 0.02 * flip;
+        this.angle.degrees -= 0.02 * flip;
       }
     }
 
-    this.position.x -= Math.sin(this.angle) * this.speed;
-    this.position.y -= Math.cos(this.angle) * this.speed;
+    this.position.x -= Math.sin(this.angle.degrees) * this.speed;
+    this.position.y -= Math.cos(this.angle.degrees) * this.speed;
   }
 
   draw(ctx: CanvasRenderingContext2D) {
     ctx.save();
     ctx.translate(this.position.x, this.position.y);
-    ctx.rotate(-this.angle);
+    ctx.rotate(-this.angle.degrees);
     ctx.fillRect(-this.width / 2, -this.height / 2, this.width, this.height);
     ctx.restore();
   }

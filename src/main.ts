@@ -23,17 +23,19 @@ export default function main() {
     30,
     50,
   );
-  const sensor = new Sensor(car.position);
+  const sensor = new Sensor(car.position, car.angle);
 
   (function animate() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     car.update();
+    sensor.update(road.borders);
 
     ctx.save();
     ctx.translate(0, -car.position.y + canvas.height * 0.667);
 
     road.draw(ctx);
+    sensor.draw(ctx);
     car.draw(ctx);
 
     ctx.restore();
