@@ -14,7 +14,7 @@ export default function main() {
   canvas.width = 200;
 
   const ctx = canvas.getContext("2d") as CanvasRenderingContext2D;
-  const road = new Road(canvas.width / 2, canvas.width, 3);
+  const road = new Road(canvas.width / 2, canvas.width - 10, 3);
   const car = new Car(
     new Vector2(
       road.getLaneCenter(Math.floor(road.laneCount / 2)),
