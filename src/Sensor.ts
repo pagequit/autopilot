@@ -42,25 +42,15 @@ export default class Sensor {
         segment.vertices[0],
         segment.vertices[1],
       );
-      if (touch) {
-        touches.push(touch);
-      }
+
+      touches.push(touch);
     }
 
-    if (touches.length > 1) {
-      return new Intersection(new Vector2(0, 0), 0);
-    }
+    touches = touches.filter((t) => t.offset !== 0).sort((a, b) =>
+      a.offset - b.offset
+    );
 
-    return touches.sort(function (a, b) {
-      if (a.offset < b.offset) {
-        return -1;
-      }
-      if (a.offset > b.offset) {
-        return 1;
-      }
-
-      return 0;
-    })[0];
+    return touches[0] ?? new Intersection(new Vector2(0, 0), 0);
   }
 
   castRays() {
