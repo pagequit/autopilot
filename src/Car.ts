@@ -1,6 +1,7 @@
 import Controls from "./Controls";
 import Vector2 from "./lib/Vector2";
 import Angle from "./lib/Angle";
+import Polygon from "./lib/Polygon";
 
 export default class Car {
   position: Vector2;
@@ -12,6 +13,7 @@ export default class Car {
   acceleration: number;
   friction: number;
   angle: Angle;
+  polygon: Polygon;
 
   constructor(positinon: Vector2, width: number, height: number) {
     this.position = positinon;
@@ -23,6 +25,9 @@ export default class Car {
     this.acceleration = 0.2;
     this.friction = 0.1;
     this.angle = new Angle(0);
+
+    const rad = Math.hypot(height, width) / 2;
+    this.polygon = new Polygon(positinon, []);
   }
 
   update() {
