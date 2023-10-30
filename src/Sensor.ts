@@ -81,7 +81,7 @@ export default class Sensor {
   }
 
   draw(ctx: CanvasRenderingContext2D) {
-    for (let i = 0; i < this.rayCount; i++) {
+    for (let i = 0; i < this.rays.length; i++) {
       let end: Vector2 = this.rays[i].vertices[1];
       // TODO: think about this offset convention
       if (this.readings[i].offset !== 0) {

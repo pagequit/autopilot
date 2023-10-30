@@ -4,7 +4,9 @@
 import Car from "./Car";
 import Road from "./Road";
 import Sensor from "./Sensor";
+import Polygon from "./lib/Polygon";
 import Vector2 from "./lib/Vector2";
+import polyIntersect from "./lib/polyIntersect";
 
 export default function main() {
   const canvas = document.createElement("canvas");
@@ -25,11 +27,22 @@ export default function main() {
   );
   const sensor = new Sensor(car.position, car.angle);
 
+  function processPhysics(polygons: Array<Polygon>) {
+    for (let i = 0; i < polygons.length; i++) {
+      const currentPoly = polygons[i];
+      const nextPoly = polygons[i + 1];
+      if (nextPoly && polyIntersect(currentPoly, nextPoly)) {
+        currentPoly.collide(nextPoly);
+        nextPoly.collide(currentPoly);
+      }
+    }
+  }
+
+  let now = Date.now();
+  let then = Date.now();
+
   (function animate() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-    car.update();
-    sensor.update(road.borders);
 
     ctx.save();
     ctx.translate(0, -car.position.y + canvas.height * 0.667);
@@ -38,8 +51,20 @@ export default function main() {
     sensor.draw(ctx);
     car.draw(ctx);
 
+    car.update();
+    sensor.update(road.borders);
+
+    processPhysics([
+      car.polygon,
+      road.polygon,
+    ]);
+
     ctx.restore();
 
+    then = now;
+    now = Date.now();
+    const delta = now - then;
+    ctx.fillText("FPS: " + Math.round(1000 / delta), 10, 10);
     requestAnimationFrame(animate);
   })();
 }

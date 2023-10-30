@@ -1,4 +1,5 @@
 import Line2D from "./lib/Line2D";
+import Polygon from "./lib/Polygon";
 import Vector2 from "./lib/Vector2";
 import lerp from "./lib/lerp";
 
@@ -11,6 +12,7 @@ export default class Road {
   bottom: number;
   right: number;
   borders: Array<Line2D>;
+  polygon: Polygon;
 
   constructor(center: number, width: number, laneCount: number) {
     this.center = center;
@@ -33,6 +35,12 @@ export default class Road {
       new Line2D([leftTop, leftBottom]),
       new Line2D([rightTop, rightBottom]),
     ];
+    this.polygon = new Polygon(new Vector2(center, 0), [
+      new Vector2(this.left, this.top),
+      new Vector2(this.right, this.top),
+      new Vector2(this.right, this.bottom),
+      new Vector2(this.left, this.bottom),
+    ]);
   }
 
   getLaneCenter(laneIndex: number) {
@@ -65,5 +73,7 @@ export default class Road {
       ctx.lineTo(border.getPointPosition(1).x, border.getPointPosition(1).y);
       ctx.stroke();
     }
+
+    this.polygon.draw(ctx);
   }
 }

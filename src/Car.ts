@@ -26,7 +26,10 @@ export default class Car {
     this.acceleration = 0.2;
     this.friction = 0.1;
     this.angle = new Angle(0);
-    this.polygon = new Polygon(positinon, []);
+    this.polygon = new Polygon(positinon, [new Vector2(0, 0)], () => {
+      this.damaged = true;
+      console.log("damaged");
+    });
     this.damaged = false;
   }
 
@@ -109,6 +112,12 @@ export default class Car {
   }
 
   draw(ctx: CanvasRenderingContext2D) {
+    if (this.damaged) {
+      ctx.fillStyle = "gray";
+    } else {
+      ctx.fillStyle = "black";
+    }
+
     ctx.beginPath();
     ctx.moveTo(
       this.polygon.vertices[0].x,
@@ -122,5 +131,7 @@ export default class Car {
     }
     ctx.closePath();
     ctx.fill();
+
+    this.polygon.draw(ctx);
   }
 }
