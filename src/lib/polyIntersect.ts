@@ -11,7 +11,7 @@ export default function polyIntersect(poly1: Polygon, poly2: Polygon) {
         poly2.vertices[(j + 1) % poly2.vertices.length],
       );
 
-      if (touch.offset > 0) {
+      if (touch.offset !== 0) {
         return true;
       }
     }
