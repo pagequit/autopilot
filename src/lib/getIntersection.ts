@@ -8,7 +8,7 @@ export default function getIntersection(
   c: Vector2,
   d: Vector2,
 ): Intersection {
-  let i = new Intersection(new Vector2(0, 0), 0);
+  const intersection = new Intersection(new Vector2(0, 0), 0);
   const tTop = (d.x - c.x) * (a.y - c.y) - (d.y - c.y) * (a.x - c.x);
   const uTop = (d.y - c.y) * (b.x - a.x) - (d.x - c.x) * (b.y - a.y);
   const bottom = (d.y - c.y) * (b.x - a.x) - (d.x - c.x) * (b.y - a.y);
@@ -18,13 +18,11 @@ export default function getIntersection(
     const u = uTop / bottom;
 
     if (t >= 0 && t <= 1 && u >= 0 && u <= 1) {
-      i.position = new Vector2(
-        lerp(a.x, b.x, t),
-        lerp(a.y, b.y, t),
-      );
-      i.offset = t;
+      intersection.position.x = lerp(a.x, b.x, t);
+      intersection.position.y = lerp(a.y, b.y, t);
+      intersection.offset = t;
     }
   }
 
-  return i;
+  return intersection;
 }

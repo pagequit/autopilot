@@ -2,12 +2,13 @@ import Controls from "./Controls";
 import Vector2 from "./lib/Vector2";
 import Angle from "./lib/Angle";
 import Polygon from "./lib/Polygon";
+import { CarControls } from "./CarControls";
 
 export default class Car {
   position: Vector2;
   width: number;
   height: number;
-  controls: Controls;
+  controls: CarControls;
   speed: number;
   maxSpeed: number;
   acceleration: number;
@@ -16,11 +17,16 @@ export default class Car {
   polygon: Polygon;
   damaged: boolean;
 
-  constructor(positinon: Vector2, width: number, height: number) {
+  constructor(
+    positinon: Vector2,
+    width: number,
+    height: number,
+    controls: CarControls,
+  ) {
     this.position = positinon;
     this.width = width;
     this.height = height;
-    this.controls = new Controls();
+    this.controls = controls;
     this.speed = 0;
     this.maxSpeed = 3;
     this.acceleration = 0.2;
@@ -73,10 +79,10 @@ export default class Car {
   }
 
   move() {
-    if (this.controls.u) {
+    if (this.controls.up) {
       this.speed += this.acceleration;
     }
-    if (this.controls.d) {
+    if (this.controls.down) {
       this.speed -= this.acceleration;
     }
 
@@ -99,10 +105,10 @@ export default class Car {
 
     if (this.speed !== 0) {
       const flip = this.speed > 0 ? 1 : -1;
-      if (this.controls.l) {
+      if (this.controls.left) {
         this.angle.degrees += 0.02 * flip;
       }
-      if (this.controls.r) {
+      if (this.controls.right) {
         this.angle.degrees -= 0.02 * flip;
       }
     }

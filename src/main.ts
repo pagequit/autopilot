@@ -2,6 +2,7 @@
 /// <reference lib="dom.iterable" />
 
 import Car from "./Car";
+import KeyboardControls from "./KeyboardControls";
 import Road from "./Road";
 import Sensor from "./Sensor";
 import Polygon from "./lib/Polygon";
@@ -16,6 +17,7 @@ export default function main() {
   canvas.width = 200;
 
   const ctx = canvas.getContext("2d") as CanvasRenderingContext2D;
+
   const road = new Road(canvas.width / 2, canvas.width - 10, 3);
   const car = new Car(
     new Vector2(
@@ -24,6 +26,7 @@ export default function main() {
     ),
     30,
     50,
+    new KeyboardControls(),
   );
   const sensor = new Sensor(car.position, car.angle);
 
