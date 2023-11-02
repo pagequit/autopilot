@@ -83,12 +83,11 @@ export default class Sensor {
   draw(ctx: CanvasRenderingContext2D) {
     for (let i = 0; i < this.rays.length; i++) {
       const reading = this.readings[i].offset !== 0
-        ? this.rays[i].vertices[1]
-        : this.readings[i].position;
+        ? this.readings[i].position
+        : this.rays[i].vertices[1];
 
       ctx.beginPath();
       ctx.lineWidth = 2;
-
       ctx.strokeStyle = "yellow";
       ctx.moveTo(
         this.rays[i].vertices[0].x,
@@ -100,10 +99,16 @@ export default class Sensor {
       );
       ctx.stroke();
 
+      ctx.beginPath();
+      ctx.lineWidth = 2;
       ctx.strokeStyle = "black";
-      ctx.lineTo(
+      ctx.moveTo(
         this.rays[i].vertices[1].x,
         this.rays[i].vertices[1].y,
+      );
+      ctx.lineTo(
+        reading.x,
+        reading.y,
       );
       ctx.stroke();
     }
