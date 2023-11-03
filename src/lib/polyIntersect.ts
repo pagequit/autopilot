@@ -1,7 +1,7 @@
 import Polygon from "./Polygon";
 import getIntersection from "./getIntersection";
 
-export default function polyIntersect(poly1: Polygon, poly2: Polygon) {
+export default function polysIntersect(poly1: Polygon, poly2: Polygon) {
   for (let i = 0; i < poly1.vertices.length; i++) {
     for (let j = 0; j < poly2.vertices.length; j++) {
       const touch = getIntersection(

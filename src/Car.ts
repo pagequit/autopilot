@@ -1,4 +1,3 @@
-import Controls from "./Controls";
 import Vector2 from "./lib/Vector2";
 import Angle from "./lib/Angle";
 import Polygon from "./lib/Polygon";
@@ -22,17 +21,18 @@ export default class Car {
     width: number,
     height: number,
     controls: CarControls,
+    maxSpeed = 3,
   ) {
     this.position = positinon;
     this.width = width;
     this.height = height;
     this.controls = controls;
     this.speed = 0;
-    this.maxSpeed = 3;
+    this.maxSpeed = maxSpeed;
     this.acceleration = 0.2;
     this.friction = 0.1;
     this.angle = new Angle(0);
-    this.polygon = new Polygon(positinon, [new Vector2(0, 0)], () => {
+    this.polygon = new Polygon(positinon, [], () => {
       this.damaged = true;
       console.log("damaged");
     });
@@ -136,7 +136,7 @@ export default class Car {
       );
     }
     ctx.closePath();
-    ctx.fill();
+    ctx.stroke();
 
     this.polygon.draw(ctx);
   }

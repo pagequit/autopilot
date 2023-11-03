@@ -30,6 +30,30 @@ export default function main() {
   );
   const sensor = new Sensor(car.position, car.angle);
 
+  const dummyControls = {
+    up: true,
+    down: false,
+    left: false,
+    right: false,
+  };
+
+  const trafic = [
+    new Car(
+      new Vector2(road.getLaneCenter(2), 100),
+      30,
+      50,
+      dummyControls,
+      0.2,
+    ),
+    // new Car(
+    //   new Vector2(road.getLaneCenter(0), 100),
+    //   30,
+    //   50,
+    //   dummyControls,
+    //   2.4,
+    // ),
+  ];
+
   function processPhysics(polygons: Array<Polygon>) {
     for (let i = 0; i < polygons.length; i++) {
       const currentPoly = polygons[i];
@@ -51,15 +75,25 @@ export default function main() {
     ctx.translate(0, -car.position.y + canvas.height * 0.667);
 
     road.draw(ctx);
+
+    sensor.update([
+      // road.polygon,
+      ...trafic.map((car) => car.polygon),
+    ]);
     sensor.draw(ctx);
-    car.draw(ctx);
+
+    for (const car of trafic) {
+      car.update();
+      car.draw(ctx);
+    }
 
     car.update();
-    sensor.update(road.borders);
+    car.draw(ctx);
 
     processPhysics([
       car.polygon,
       road.polygon,
+      // ...trafic.map((car) => car.polygon),
     ]);
 
     ctx.restore();

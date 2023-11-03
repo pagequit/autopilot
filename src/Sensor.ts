@@ -4,6 +4,7 @@ import lerp from "./lib/lerp";
 import Angle from "./lib/Angle";
 import Intersection from "./lib/Intersection";
 import getIntersection from "./lib/getIntersection";
+import Polygon from "./lib/Polygon";
 
 export default class Sensor {
   origin: Vector2;
@@ -24,26 +25,35 @@ export default class Sensor {
     this.readings = [];
   }
 
-  update(segments: Array<Line2D>) {
+  update(polygons: Array<Polygon>) {
     this.castRays();
     this.readings = [];
     for (const ray of this.rays) {
-      this.readings.push(this.getReading(ray, segments));
+      for (const polygon of polygons) {
+        this.readings.push(this.getReading(ray, polygon));
+      }
     }
   }
 
-  getReading(ray: Line2D, segments: Array<Line2D>): Intersection {
+  getReading(ray: Line2D, poly2: Polygon): Intersection {
     let touches: Array<Intersection> = [];
 
-    for (const segment of segments) {
-      const touch = getIntersection(
-        ray.vertices[0],
-        ray.vertices[1],
-        segment.vertices[0],
-        segment.vertices[1],
-      );
+    const poly1 = new Polygon(
+      this.origin,
+      ray.vertices,
+    );
 
-      touches.push(touch);
+    for (let i = 0; i < poly1.vertices.length; i++) {
+      for (let j = 0; j < poly2.vertices.length; j++) {
+        const touch = getIntersection(
+          poly1.vertices[i],
+          poly1.vertices[(i + 1) % poly1.vertices.length],
+          poly2.vertices[j],
+          poly2.vertices[(j + 1) % poly2.vertices.length],
+        );
+
+        touches.push(touch);
+      }
     }
 
     touches = touches.filter((t) => t.offset !== 0).sort((a, b) =>
@@ -103,12 +113,12 @@ export default class Sensor {
       ctx.lineWidth = 2;
       ctx.strokeStyle = "black";
       ctx.moveTo(
-        this.rays[i].vertices[1].x,
-        this.rays[i].vertices[1].y,
-      );
-      ctx.lineTo(
         reading.x,
         reading.y,
+      );
+      ctx.lineTo(
+        this.rays[i].vertices[1].x,
+        this.rays[i].vertices[1].y,
       );
       ctx.stroke();
     }
