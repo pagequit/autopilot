@@ -15,9 +15,9 @@ export default class Polygon {
     this.collide = collide;
   }
 
-  draw(ctx: CanvasRenderingContext2D) {
+  draw(ctx: CanvasRenderingContext2D, color: string = "black") {
     ctx.lineWidth = 1;
-    ctx.strokeStyle = "black";
+    ctx.strokeStyle = color;
 
     ctx.moveTo(
       this.vertices[0].x,

@@ -136,8 +136,8 @@ export default class Car {
       );
     }
     ctx.closePath();
-    ctx.stroke();
+    ctx.fill();
 
-    this.polygon.draw(ctx);
+    this.polygon.draw(ctx, "blue");
   }
 }

@@ -5,6 +5,7 @@ import Angle from "./lib/Angle";
 import Intersection from "./lib/Intersection";
 import getIntersection from "./lib/getIntersection";
 import Polygon from "./lib/Polygon";
+import PointRenderer2D from "./lib/PointRenderer2D";
 
 export default class Sensor {
   origin: Vector2;
@@ -14,6 +15,7 @@ export default class Sensor {
   raySpread: number;
   rays: Array<Line2D>;
   readings: Array<Intersection>;
+  touches: Array<Intersection>;
 
   constructor(origin: Vector2, angel: Angle) {
     this.origin = origin;
@@ -23,6 +25,7 @@ export default class Sensor {
     this.raySpread = Math.PI / 2;
     this.rays = [];
     this.readings = [];
+    this.touches = [];
   }
 
   update(polygons: Array<Polygon>) {
@@ -36,7 +39,7 @@ export default class Sensor {
   }
 
   getReading(ray: Line2D, poly2: Polygon): Intersection {
-    let touches: Array<Intersection> = [];
+    this.touches = [];
 
     const poly1 = new Polygon(
       this.origin,
@@ -52,15 +55,13 @@ export default class Sensor {
           poly2.vertices[(j + 1) % poly2.vertices.length],
         );
 
-        touches.push(touch);
+        this.touches.push(touch);
       }
     }
 
-    touches = touches.filter((t) => t.offset !== 0).sort((a, b) =>
-      a.offset - b.offset
-    );
-
-    return touches[0] ?? new Intersection(new Vector2(0, 0), 0);
+    let touches = this.touches.filter((t) => t.offset !== 0);
+    return touches.sort((a, b) => a.offset - b.offset)[0] ??
+      new Intersection(new Vector2(0, 0), 0);
   }
 
   castRays() {
@@ -91,6 +92,15 @@ export default class Sensor {
   }
 
   draw(ctx: CanvasRenderingContext2D) {
+    for (const touch of this.touches) {
+      const point = new PointRenderer2D(
+        touch.position,
+        `${touch.offset.toFixed(2)}`.substring(2, 4),
+        "white",
+      );
+      point.render(ctx);
+    }
+
     for (let i = 0; i < this.rays.length; i++) {
       const reading = this.readings[i].offset !== 0
         ? this.readings[i].position
@@ -121,6 +131,13 @@ export default class Sensor {
         this.rays[i].vertices[1].y,
       );
       ctx.stroke();
+
+      const point = new PointRenderer2D(
+        reading,
+        `${i}`,
+        "white",
+      );
+      point.render(ctx);
     }
   }
 }

@@ -31,7 +31,7 @@ export default function main() {
   const sensor = new Sensor(car.position, car.angle);
 
   const dummyControls = {
-    up: true,
+    up: false,
     down: false,
     left: false,
     right: false,
@@ -76,16 +76,10 @@ export default function main() {
 
     road.draw(ctx);
 
-    sensor.update([
-      // road.polygon,
-      ...trafic.map((car) => car.polygon),
-    ]);
-    sensor.draw(ctx);
-
-    for (const car of trafic) {
-      car.update();
-      car.draw(ctx);
-    }
+    // for (const car of trafic) {
+    //   car.update();
+    //   car.draw(ctx);
+    // }
 
     car.update();
     car.draw(ctx);
@@ -96,7 +90,27 @@ export default function main() {
       // ...trafic.map((car) => car.polygon),
     ]);
 
+    sensor.update([
+      road.polygon,
+      // ...trafic.map((car) => car.polygon),
+    ]);
+    sensor.draw(ctx);
+
     ctx.restore();
+
+    ctx.beginPath();
+    ctx.strokeStyle = "darkgrey";
+    ctx.setLineDash([2, 2]);
+
+    ctx.moveTo(canvas.width / 2, 0);
+    ctx.lineTo(canvas.width / 2, canvas.height);
+    ctx.stroke();
+
+    ctx.moveTo(0, canvas.height / 2);
+    ctx.lineTo(canvas.width, canvas.height / 2);
+    ctx.stroke();
+
+    ctx.setLineDash([]);
 
     then = now;
     now = Date.now();

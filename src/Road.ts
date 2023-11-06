@@ -22,7 +22,8 @@ export default class Road {
     this.left = center - width / 2;
     this.right = center + width / 2;
 
-    const pseudoInifity = 1000000;
+    const pseudoInifity = 100;
+    // const pseudoInifity = 1000000;
     this.top = -pseudoInifity;
     this.bottom = pseudoInifity;
 
