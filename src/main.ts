@@ -37,7 +37,7 @@ export default function main() {
     right: false,
   };
 
-  const trafic = [
+  const traffic = [
     new Car(
       new Vector2(road.getLaneCenter(2), 100),
       30,
@@ -76,7 +76,7 @@ export default function main() {
 
     road.draw(ctx);
 
-    // for (const car of trafic) {
+    // for (const car of traffic) {
     //   car.update();
     //   car.draw(ctx);
     // }
@@ -87,12 +87,12 @@ export default function main() {
     processPhysics([
       car.polygon,
       road.polygon,
-      // ...trafic.map((car) => car.polygon),
+      // ...traffic.map((car) => car.polygon),
     ]);
 
     sensor.update([
       road.polygon,
-      // ...trafic.map((car) => car.polygon),
+      // ...traffic.map((car) => car.polygon),
     ]);
     sensor.draw(ctx);
 
